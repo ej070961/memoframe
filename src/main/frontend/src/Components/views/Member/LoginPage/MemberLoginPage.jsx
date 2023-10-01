@@ -1,12 +1,12 @@
 import React from 'react'
 import * as l from '../../../styles/LoginStyle'
-import {AiFillGoogleCircle} from 'react-icons/ai';
-import {SiNaver} from 'react-icons/si';
-import {RiKakaoTalkFill} from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom';
+import SocialLogin from './Section/SocialLogin';
 function MemberLoginPage() {
   
   const navigate = useNavigate();
+
+
   return (
     <l.LoginLayout>
       <span className='memoframe'>MemoFrame</span>
@@ -22,15 +22,7 @@ function MemberLoginPage() {
             <p> 또는 </p>
             <hr/>
           </l.OrBox>
-          <l.SocialContainer>
-            <AiFillGoogleCircle className='google' />
-            <div className="centered-icon-container" style={{background:'#FBE951'}}>
-            <RiKakaoTalkFill className="kakao"/>
-            </div>
-            <div className="centered-icon-container" style={{background:'#58C038'}}>
-            <SiNaver className='naver'/>
-            </div>
-          </l.SocialContainer>
+          <SocialLogin/>
       </l.LoginFormContainer>
       <p className='text'>host이신가요? <span onClick={()=>navigate('/host/login')} className='hostlogin'>host 로그인</span></p>
     </l.LoginLayout>
