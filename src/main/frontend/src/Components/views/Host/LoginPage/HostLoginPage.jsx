@@ -11,7 +11,7 @@ function MemberLoginPage() {
         <l.LoginLayout>
         <span className='memoframe'>MemoFrame</span>
         <p className='text'>내 포토부스 홍보하고, 주변 상권과 제휴맺기</p>
-        <l.LoginFormContainer>
+        <l.LoginContainer>
             <p className='bigtext'>로그인</p>
             <span className='smalltext'>소셜 로그인 및 이메일로 로그인할 수 있습니다.</span>
             <l.InputContainer name="email" placeholder='Email'></l.InputContainer>
@@ -31,7 +31,7 @@ function MemberLoginPage() {
                 <SiNaver className='naver'/>
                 </div>
             </l.SocialContainer>
-        </l.LoginFormContainer>
+        </l.LoginContainer>
         <p className='text'>일반 고객 이신가요? <span onClick={()=>navigate('/member/login')}className='hostlogin'>Member 로그인</span></p>
         </l.LoginLayout>
     

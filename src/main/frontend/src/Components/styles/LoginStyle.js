@@ -28,7 +28,7 @@ export const LoginLayout = styled.div`
     }
 `
 
-export const LoginFormContainer = styled.div`
+export const LoginContainer = styled.div`
 
     width: 35rem;
     height: 32rem;
@@ -59,6 +59,13 @@ export const LoginFormContainer = styled.div`
 
     }
 
+`
+export const EmailLoginForm = styled.form`
+    width: 32rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
 `
 export const InputContainer = styled.input`
     margin-top: 1rem;
