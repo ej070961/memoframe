@@ -25,7 +25,7 @@ export const NavLayout = styled.nav`
         font-weight: 400;
         text-decoration-line: none;
         text-decoration: none;
-        margin: 1rem;
+        margin-right: 1rem;
     }
 
 `

@@ -11,6 +11,7 @@ function NavBar() {
             </div>
             <div>
                 <a href='/member/login' className='a_login'>로그인</a>
+        
             </div>
         </n.NavLayout>
     </div>

@@ -16,7 +16,7 @@ function MemberLoginPage() {
             <span className='smalltext'>소셜 로그인 및 이메일로 로그인할 수 있습니다.</span>
             <l.InputContainer name="email" placeholder='Email'></l.InputContainer>
             <l.InputContainer name="password" placeholder='Password'></l.InputContainer>
-            <l.LoginButton>이메일로 시작하기</l.LoginButton>
+            <l.ButtonContainer style={{width: '83%'}}>이메일로 시작하기</l.ButtonContainer>
             <l.OrBox>
                 <hr/>
                 <p> 또는 </p>

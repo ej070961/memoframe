@@ -23,13 +23,22 @@ export const LoginLayout = styled.div`
         font-weight: 400;
         line-height: normal;
     }
+    .bottomtext{
+        color: #000;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 1rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin:0.3rem;
+
+    }
     .hostlogin{
         cursor: pointer;
     }
 `
 
 export const LoginContainer = styled.div`
-
     width: 35rem;
     height: 32rem;
     border-radius: 20px;
@@ -67,9 +76,17 @@ export const EmailLoginForm = styled.form`
     align-items: center;
   
 `
+export const InputLabel = styled.label`
+    width: 83%;
+    color: #000;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 500;
+`
 export const InputContainer = styled.input`
-    margin-top: 1rem;
-    width: 80%;
+    margin-top: 0.8rem;
+    width: 82%;
     height: 2.7rem;
     border: 1px solid #D9D9D9;
     background: #FFF;
@@ -77,7 +94,7 @@ export const InputContainer = styled.input`
     color: #000;
     font-family: 'Noto Sans', sans-serif;
     padding-left: 0.1rem;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -85,9 +102,8 @@ export const InputContainer = styled.input`
   
 `
 
-export const LoginButton = styled.button`
+export const ButtonContainer = styled.button`
     margin-top: 1rem;
-    width: 80%;
     height: 2.7rem;
     background: #26282B;
 
@@ -97,7 +113,6 @@ export const LoginButton = styled.button`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-
 `
 
 export const OrBox = styled.div`
