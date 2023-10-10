@@ -1,7 +1,10 @@
 import React, {useState} from 'react'
 import * as l from '../../../../styles/LoginStyle'
 import { useNavigate } from 'react-router-dom';
-
+import axios from "axios";
+const api = axios.create({
+    baseURL: 'http://localhost:8080', // Replace with your backend server's address
+});
 function EmailSignup() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
@@ -11,7 +14,7 @@ function EmailSignup() {
 
 
     const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/; //이메일 정규식
-    const passwordRegEx = /^[A-Za-z0-9]{8,20}$/ //비밀번호 정규식 
+    const passwordRegEx = /^[A-Za-z0-9]{8,20}$/ //비밀번호 정규식
 
     const emailCheck = (email) => {
         return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
@@ -41,18 +44,20 @@ function EmailSignup() {
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if(!emailCheck(email)){
             alert('이메일 형식을 확인해주세요');
+            return; //내가 추가
         }
 
         if (!passwordCheck(password)) {
             alert('비밀번호는 영문대소문자, 숫자 포함 8자리 이상이어야 합니다. 비밀번호 형식을 확인해주세요');
+            return;//추가
         }
 
-        //이메일과 비밀번호가 모두 형식에 맞을 경우 
+        //이메일과 비밀번호가 모두 형식에 맞을 경우
         if (emailCheck(email) && passwordCheck(password)) {
 
             let variable = {
@@ -60,7 +65,21 @@ function EmailSignup() {
                 password: password
             }
             console.log(variable);
-            navigate('/member/register/inputprofile');
+
+            try {
+                const response = await api.post('/api/member/finduser', variable);
+
+                if(response.data.existedUser){
+                    alert('This email is already registered!');
+                    navigate('/member/login');
+                } else {
+
+                    navigate('/member/register/inputprofile', {state: {user: {email, password}}});
+                }
+
+            } catch(error) {
+                console.error("Error checking the email", error);
+            }
         }
 
     }

@@ -1,9 +1,15 @@
 import React, {useState,useRef} from 'react'
 import * as l from '../../../../styles/LoginStyle'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation} from 'react-router-dom';
+import axios from "axios";
+const api = axios.create({
+    baseURL: 'http://localhost:8080', // Replace with your backend server's address
+});
+
 function InputProfile() {
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     const fileInput = useRef(null);
     const [Nickname, setNickname] = useState('');
@@ -25,18 +31,58 @@ function InputProfile() {
         setNickname(e.target.value);
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        let variable = {
-            ProfileImg: ProfileImg,
-            Nickname: Nickname
+
+        if (!location.state || !location.state.user) {
+            alert('Please enter your email and password first.');
+            navigate('/member/register'); // Redirect to the previous step
+            return;
         }
 
-        console.log(variable);
-        navigate('/');
+        let responseFromRedis;
 
-        
+        try {
+            const userEmail = location.state.user.email;
+
+            responseFromRedis = await api.get('/api/member/getuser', { params: { email: userEmail } });
+
+
+            if(responseFromRedis.status !== 200){
+                alert('Error occurred while getting user info from Redis!');
+                console.error(responseFromRedis.data);
+                return;
+            }
+        } catch(error) {
+            console.error("Error getting user info from Redis", error);
+            return;
+        } //추가
+
+        let variable = {
+            email: responseFromRedis.data.email,
+            password: responseFromRedis.data.password,
+            profileimage: ProfileImg,
+            nickname: Nickname
+        }
+
+
+        try {
+            const responseRegisterUser= await api.post('/api/member/register', variable);
+
+            if(responseRegisterUser.status === 200){
+                alert('User registered successfully!');
+                navigate('/');
+            } else {
+                alert('Error occurred during registration!');
+                console.error(responseRegisterUser.data);
+            }
+        } catch(error) {
+            console.error("Error registering the user", error);
+        }
+
+
+
     }
        
     return (
