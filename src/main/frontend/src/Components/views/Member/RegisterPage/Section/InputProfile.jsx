@@ -29,6 +29,7 @@ function InputProfile() {
         e.preventDefault();
 
         let variable = {
+            
             ProfileImg: ProfileImg,
             Nickname: Nickname
         }
