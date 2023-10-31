@@ -2,6 +2,7 @@ import React, {useState,useRef} from 'react'
 import * as l from '../../../../styles/LoginStyle'
 import { useNavigate, useLocation} from 'react-router-dom';
 import axios from "axios";
+
 const api = axios.create({
     baseURL: 'http://localhost:8080', // Replace with your backend server's address
 });
@@ -10,6 +11,8 @@ function InputProfile() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const userInfo = {...location.state}; //useLocation으로 state값을 받아옴
+    console.log(userInfo);
 
     const fileInput = useRef(null);
     const [Nickname, setNickname] = useState('');
@@ -35,33 +38,42 @@ function InputProfile() {
         e.preventDefault();
 
 
-        if (!location.state || !location.state.user) {
-            alert('Please enter your email and password first.');
-            navigate('/member/register'); // Redirect to the previous step
-            return;
-        }
+        // if (!location.state || !location.state.user) {
+        //     alert('Please enter your email and password first.');
+        //     navigate('/member/register'); // Redirect to the previous step
+        //     return;
+        // }
 
-        let responseFromRedis;
+        // let variable = {
+        //
+        //     ProfileImg: ProfileImg,
+        //     Nickname: Nickname
+        //
+        // }
 
-        try {
-            const userEmail = location.state.user.email;
-
-            responseFromRedis = await api.get('/api/member/getuser', { params: { email: userEmail } });
-
-
-            if(responseFromRedis.status !== 200){
-                alert('Error occurred while getting user info from Redis!');
-                console.error(responseFromRedis.data);
-                return;
-            }
-        } catch(error) {
-            console.error("Error getting user info from Redis", error);
-            return;
-        } //추가
+        // let responseFromRedis;
+        //
+        // try {
+        //     const userEmail = location.state.user.email;
+        //
+        //     responseFromRedis = await api.get('/api/member/getuser', { params: { email: userEmail } });
+        //
+        //
+        //     if(responseFromRedis.status !== 200){
+        //         alert('Error occurred while getting user info from Redis!');
+        //         console.error(responseFromRedis.data);
+        //         return;
+        //     }
+        // } catch(error) {
+        //     console.error("Error getting user info from Redis", error);
+        //     return;
+        // } //추가
 
         let variable = {
-            email: responseFromRedis.data.email,
-            password: responseFromRedis.data.password,
+            // email: responseFromRedis.data.email,
+            // password: responseFromRedis.data.password,
+            email: userInfo.email,
+            password: userInfo.password,
             profileimage: ProfileImg,
             nickname: Nickname
         }
@@ -111,4 +123,4 @@ function InputProfile() {
   
 }
 
-export default InputProfile
+export default InputProfile;

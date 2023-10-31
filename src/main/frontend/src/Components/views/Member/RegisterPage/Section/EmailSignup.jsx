@@ -74,7 +74,8 @@ function EmailSignup() {
                     navigate('/member/login');
                 } else {
 
-                    navigate('/member/register/inputprofile', {state: {user: {email, password}}});
+                    navigate('/member/register/inputprofile',
+                        {state: {email: email, password: password}});
                 }
 
             } catch(error) {
