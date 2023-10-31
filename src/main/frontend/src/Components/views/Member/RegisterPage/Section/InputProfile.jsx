@@ -11,12 +11,12 @@ function InputProfile() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const userInfo = {...location.state}; //useLocation으로 state값을 받아옴
-    console.log(userInfo);
+    const userinfo = {...location.state}; //useLocation으로 EmailSignup 컴포넌트에서 보낸 state값을 받아옴
 
     const fileInput = useRef(null);
     const [Nickname, setNickname] = useState('');
     const [ProfileImg, setProfileImg] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png")
+
     const onChange = (e) => {
         if(e.target.files[0]){
              //화면에 프로필 사진 표시
@@ -37,62 +37,28 @@ function InputProfile() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-
-        // if (!location.state || !location.state.user) {
-        //     alert('Please enter your email and password first.');
-        //     navigate('/member/register'); // Redirect to the previous step
-        //     return;
-        // }
-
-        // let variable = {
-        //
-        //     ProfileImg: ProfileImg,
-        //     Nickname: Nickname
-        //
-        // }
-
-        // let responseFromRedis;
-        //
-        // try {
-        //     const userEmail = location.state.user.email;
-        //
-        //     responseFromRedis = await api.get('/api/member/getuser', { params: { email: userEmail } });
-        //
-        //
-        //     if(responseFromRedis.status !== 200){
-        //         alert('Error occurred while getting user info from Redis!');
-        //         console.error(responseFromRedis.data);
-        //         return;
-        //     }
-        // } catch(error) {
-        //     console.error("Error getting user info from Redis", error);
-        //     return;
-        // } //추가
-
+        //서버에 보낼 data 설정 
         let variable = {
-            // email: responseFromRedis.data.email,
-            // password: responseFromRedis.data.password,
-            email: userInfo.email,
-            password: userInfo.password,
+            member_id: userinfo.member_id,
             profileimage: ProfileImg,
             nickname: Nickname
         }
-
+        console.log(variable);
 
         try {
-            const responseRegisterUser= await api.post('/api/member/register', variable);
-
-            if(responseRegisterUser.status === 200){
-                alert('User registered successfully!');
+            //서버 요청
+            const response= await api.post('/api/member/saveProfile', variable);
+            //서버 응답 후 처리 
+            if(response.status === 200){
+                alert("프로필 등록 완료!");
                 navigate('/');
             } else {
-                alert('Error occurred during registration!');
-                console.error(responseRegisterUser.data);
+                alert('회원가입 중 오류가 발생하였습니다.');
+                console.error(response.data);
             }
         } catch(error) {
             console.error("Error registering the user", error);
         }
-
 
 
     }

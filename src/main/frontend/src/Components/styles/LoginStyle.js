@@ -74,6 +74,15 @@ export const EmailLoginForm = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .error{
+        width: 82%;
+        font-family: 'Noto Sans KR', sans-serif;
+        font-size: 0.9rem;
+        font-style: normal;
+        font-weight: 500;
+        color: #9B111E;
+    }
   
 `
 export const InputLabel = styled.label`
@@ -98,6 +107,8 @@ export const InputContainer = styled.input`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+
+   
 
   
 `
