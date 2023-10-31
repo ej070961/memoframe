@@ -1,96 +1,74 @@
 import React, {useState} from 'react'
 import * as l from '../../../../styles/LoginStyle'
 import { useNavigate } from 'react-router-dom';
+import {useForm} from 'react-hook-form'
 import axios from "axios";
+
 const api = axios.create({
     baseURL: 'http://localhost:8080', // Replace with your backend server's address
 });
+
 function EmailSignup() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm();
 
 
-    const emailRegEx = /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/; //이메일 정규식
-    const passwordRegEx = /^[A-Za-z0-9]{8,20}$/ //비밀번호 정규식
+    const onSubmit = async (data) => {
 
-    const emailCheck = (email) => {
-        return emailRegEx.test(email); //형식에 맞을 경우, true 리턴
-    }
-
-    const passwordCheck = (password) => {
-        if(password.match(passwordRegEx)===null) { //형식에 맞지 않을 경우 아래 콘솔 출력
-          return false;
-        }else{ // 맞을 경우 출력
-          return true;
+        let variable = {
+            email: data.email,
+            password: data.password,
+            login_type: 1
         }
-    }
-    const handleChange = (e) =>{
+        console.log(variable);
 
-        const { name, value } = e.target;
-        switch (name) {
-            case 'email':
-                setEmail(value);
-                setEmailError('');
-            break;
-            case 'password':
-                setPassword(value);
-                setEmailError('');
-            break;
-            default:
-            break;
-        }
-    }
+        try {
+            const response = await api.post('/api/member/register', variable);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if(!emailCheck(email)){
-            alert('이메일 형식을 확인해주세요');
-            return; //내가 추가
-        }
-
-        if (!passwordCheck(password)) {
-            alert('비밀번호는 영문대소문자, 숫자 포함 8자리 이상이어야 합니다. 비밀번호 형식을 확인해주세요');
-            return;//추가
-        }
-
-        //이메일과 비밀번호가 모두 형식에 맞을 경우
-        if (emailCheck(email) && passwordCheck(password)) {
-
-            let variable = {
-                email: email,
-                password: password
-            }
-            console.log(variable);
-
-            try {
-                const response = await api.post('/api/member/finduser', variable);
-
-                if(response.data.existedUser){
-                    alert('This email is already registered!');
+            if(response.status === 200){ // HTTP 상태 코드가 200인 경우 회원 가입 성공
+                if(response.data.registerSuccess===true){
+                    console.log(response.data.registerSuccess);
+                    console.log(response.data.message);
+                    navigate('/member/register/inputprofile', {state: {member_id: response.data.member_id}}) // 프로필 입력창으로 이동
+                }else{
+                    alert(response.data.message); // 이미 가입된 이메일이면 alert창과 함께 login 페이지로 이동 
                     navigate('/member/login');
-                } else {
-
-                    navigate('/member/register/inputprofile',
-                        {state: {email: email, password: password}});
                 }
-
-            } catch(error) {
-                console.error("Error checking the email", error);
             }
-        }
 
+        } catch(error) {
+            console.error("Error checking the email", error);
+
+        }
+        
     }
     return (
-        <l.EmailLoginForm>
-            <l.InputContainer name="email" placeholder='Email' value={email} onChange={handleChange}></l.InputContainer>
-            {/* {emailError && <p style={{ color: 'red' }}>{emailError}</p>} */}
-            <l.InputContainer name="password" placeholder='Password' value={password} onChange={handleChange}></l.InputContainer>
-            {/* {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>} */}
-            <l.ButtonContainer style={{width: '83%'}} onClick={handleSubmit}>이메일로 시작하기</l.ButtonContainer>
+        <l.EmailLoginForm onSubmit={handleSubmit(onSubmit)}>
+            <l.InputContainer  type="email" name="email" placeholder='Email'
+            {...register('email', {
+                required: '이메일을 입력하세요',
+                pattern: {
+                    value: /^[A-Za-z0-9]([-_.]?[A-Za-z0-9])*@[A-Za-z0-9]([-_.]?[A-Za-z0-9])*\.[A-Za-z]{2,3}$/, //이메일 정규식
+                    message: '이메일 형식을 확인해주세요', //이메일 형식 검증 
+                }
+            })}/>
+            {errors.email && <span className="error">{errors.email.message}</span>}
+
+            <l.InputContainer type="password" name="password" placeholder='Password' 
+            {...register('password', 
+                {required: '비밀번호를 입력하세요',
+                pattern: {
+                    value: /^[A-Za-z0-9]{8,20}$/, //비밀번호 정규식 
+                    message: '알파벳과 숫자를 포함한 최소 8자 이상이어야 합니다', //비밀번호 패턴 검증 
+                }
+            })}/>
+	        {errors.password && <span className="error">{errors.password.message}</span>}
+            <l.ButtonContainer style={{width: '83%'}} type="submit">이메일로 시작하기</l.ButtonContainer>
         </l.EmailLoginForm>
     )
 }

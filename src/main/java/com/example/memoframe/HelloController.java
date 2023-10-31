@@ -1,4 +1,4 @@
-package com.example.memoframe.Controller;
+package com.example.memoframe;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

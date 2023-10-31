@@ -1,21 +1,26 @@
-package com.example.memoframe.Member;
+package com.example.memoframe.Member.Domain;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "member")
-public class Member {
-
+@Table(name = "m_emailinfo_tb")
+public class MemberEmailInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int email_id;
     private int member_id;
-    private String nickname;
+
+
     private String email;
     private String password;
-    @Column(name = "profileimage")
-    private String profileimage;
 
+    public int getEmail_id() {
+        return email_id;
+    }
+
+    public void setEmail_id(int email_id) {
+        this.email_id = email_id;
+    }
 
     public int getMember_id() {
         return member_id;
@@ -23,14 +28,6 @@ public class Member {
 
     public void setMember_id(int member_id) {
         this.member_id = member_id;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     public String getEmail() {
@@ -48,15 +45,5 @@ public class Member {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getProfileimage() {
-        return profileimage;
-    }
-
-    public void setProfileimage(String profileimage) {
-        this.profileimage = profileimage;
-    }
-
-
 
 }
